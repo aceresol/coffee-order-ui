@@ -1,60 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Receipt - Coffee Order System</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            text-align: center;
-        }
-        .receipt-container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .receipt-item {
-            margin: 10px 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Order System</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: rgb(237, 199, 133); 
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: #f5f5dc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #333;
+    }
+    .order-status {
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        background-color: #c0a080;
+        color: #fff;
+        text-decoration: none;
+    }
+    .order-status:hover {
+        background-color: #b08968;
+    }
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .beverage-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    button {
+        background-color: #c0a080;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-transform: uppercase;
+    }
+    button:hover {
+        background-color: #b08968;
+    }
+    .beverage-title {
+        text-align: center;
+        font-size: 1.5rem;
+        margin: 1rem 0;
+    }
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .summary {
+        text-align: center;
+        font-size: 1.2rem;
+    }
+    
+</style>
 </head>
 <body>
-    <div class="receipt-container">
-        <h2>Order Receipt</h2>
-        <div id="receipt-details"></div>
-    </div>
-    <script>
-        function displayReceipt() {
-            const orderResponse = JSON.parse(localStorage.getItem('orderResponse'));
-            const receiptDetailsDiv = document.getElementById('receipt-details');
 
-            if (orderResponse) {
-                const idDiv = document.createElement('div');
-                idDiv.innerText = `Order ID: ${orderResponse.id}`;
-                idDiv.classList.add('receipt-item');
+<header>
+    <a href="home.html" style="text-decoration: none; color: inherit;">
+        <h1>Coffee Order System</h1>
+    </a>
+    <div class="order-status" onclick="location.href='orders.html';">Order Status</div>
+</header>
 
-                const descriptionDiv = document.createElement('div');
-                descriptionDiv.innerText = `Description: ${orderResponse.description}`;
-                descriptionDiv.classList.add('receipt-item');
+<main class="summary">
+   
+</main>
+<script>
+    var beverage = localStorage.getItem('selectedBeverage');
+    var condiments = localStorage.getItem('selectedCondiments')||[];
+    var condimentsString = localStorage.getItem('selectedCondiments') || '';
+    var condimentsArray = condimentsString.split(',');
+var orderData = {
+    beverage: beverage,
+    condiments: condimentsArray
+};
+    console.log(JSON.stringify(orderData)); 
+    fetch('https://coffee-order-latest-bm32.onrender.com/orders', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderData),
+})
+.then(response => {
+    if (!response.ok) {
+        return response.text().then(text => { throw new Error(text) });
+    }
+    return response.json();
+})
+.then(data => {
+    document.querySelector('.summary').innerHTML = `
+        <p>Order Placed:</p>
+        <p>Order id: ${data.id}</p>
+        <p>${data.description}</p>
+        <p>Total: $${data.cost}</p>
+    `;
+})
+.catch((error) => {
+    console.error('Error:', error);
+    document.querySelector('.summary').textContent = 'There was an error processing your order: ' + error.message;
+});
 
-                const priceDiv = document.createElement('div');
-                priceDiv.innerText = `Price: $${orderResponse.price.toFixed(2)}`;
-                priceDiv.classList.add('receipt-item');
 
-                receiptDetailsDiv.appendChild(idDiv);
-                receiptDetailsDiv.appendChild(descriptionDiv);
-                receiptDetailsDiv.appendChild(priceDiv);
-            } else {
-                receiptDetailsDiv.innerText = 'No order details found.';
-            }
-        }
+    localStorage.clear();
+</script>
 
-        displayReceipt();
-    </script>
 </body>
 </html>

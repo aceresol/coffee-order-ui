@@ -19,24 +19,18 @@
         color: #333;
         padding: 10px 20px;
     }
+    #header a.header {
+        font-size: 32px; 
+        text-decoration: none; 
+        color: #010101; 
+    }
     #container {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
     }
-    button {
-        background-color: #c0a080;
-        color: rgb(21, 20, 20);
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 18px;
-    }
-    button:hover {
-        background-color: #b08968;
-    }
+    
     #orderStatus {
         position: absolute;
         top: 20px;
@@ -55,23 +49,15 @@
 <body>
 
 <div id="header">
-    <h1>Coffee Order System</h1>
+    <a href="home.html" class="header">Coffee Order System</a>
 </div>
 
-<div id="container">
-    <button id="startOrderButton">Start your order here</button>
-</div>
 
 <div id="orderStatus">Order Status</div>
 
 <script>
-document.getElementById("startOrderButton").onclick = function () {
-    window.location.href = "beverages.html"; 
-};
 
-document.getElementById("orderStatus").onclick = function () {
-    window.location.href = 'orders.html';
-};
+
 </script>
 
 </body>
