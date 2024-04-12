@@ -50,6 +50,7 @@
     #orderStatus:hover {
         background-color: #b08968;
     }
+    
 </style>
 </head>
 <body>
@@ -60,6 +61,7 @@
 
 <div id="container">
     <button id="startOrderButton">Start your order here</button>
+    <button id="loginButton">Login</button>
 </div>
 
 <div id="orderStatus">Order Status</div>
@@ -71,6 +73,9 @@ document.getElementById("startOrderButton").onclick = function () {
 
 document.getElementById("orderStatus").onclick = function () {
     window.location.href = 'orders.html';
+};
+document.getElementById("loginButton").onclick = function () {
+    window.location.href = 'login.html';
 };
 </script>
 
